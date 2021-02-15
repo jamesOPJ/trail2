@@ -3,26 +3,77 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(MaterialApp(
     title: "this is hello app",
+    theme: ThemeData(
+      primaryColor: Colors.pink,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+    ),
     home: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Text(
-            "ohohoho",
-            style: TextStyle(
-              fontSize: 60,
-              fontWeight: FontWeight.w900,
-            ),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text(
+          "ohohoho",
+          style: TextStyle(
+            fontSize: 60,
+            fontWeight: FontWeight.w900,
           ),
-          backgroundColor: Colors.black,
-          shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.only(bottomRight: Radius.circular(60))),
-          shadowColor: Colors.pink,
-          elevation: 60,
-          toolbarHeight: 100,
         ),
-        body: LoginWidget()),
+        backgroundColor: Colors.black,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(bottomRight: Radius.circular(60))),
+        shadowColor: Colors.pink,
+        elevation: 60,
+        toolbarHeight: 100,
+      ),
+      body: LoginWidget(),
+      bottomNavigationBar: BottomBarWidget(),
+    ),
   ));
+}
+
+class BottomBarWidget extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return BottomBarWidgetState();
+  }
+
+}
+
+class BottomBarWidgetState extends State<BottomBarWidget> {
+  int _bottomBarIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return  BottomNavigationBar(
+      unselectedItemColor: Colors.white,
+      selectedItemColor: Colors.pink,
+      backgroundColor: Colors.black,
+      currentIndex: _bottomBarIndex,
+      items: [
+        BottomNavigationBarItem(
+            icon: Icon(
+              Icons.login,
+            ),
+            title: Text("login")),
+        BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+            ),
+            title: Text("home")),
+      ],
+      onTap: (value){
+        setState(() {
+          _bottomBarIndex = value;
+        });
+
+      },
+
+    );
+  }
+
+
 }
 
 class LoginWidget extends StatefulWidget {
@@ -49,7 +100,7 @@ class LoginWidgetState extends State<LoginWidget> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextFormField(
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
               decoration: InputDecoration(
                   icon: Icon(Icons.person),
@@ -59,15 +110,16 @@ class LoginWidgetState extends State<LoginWidget> {
               onSaved: (value) {
                 this.username = value;
               },
-              validator: (value){
-                if(value == null) return "格式錯誤";
-                if(value.isEmpty) return "格式錯誤";
-                if(value.length<6) return "格式錯誤";
+              validator: (value) {
+                if (value == null) return "格式錯誤";
+                if (value.isEmpty) return "格式錯誤";
+                if (value.length < 6) return "格式錯誤";
                 return null;
               },
             ),
             TextFormField(
               autovalidateMode: AutovalidateMode.always,
+
               decoration: InputDecoration(
                 icon: Icon(Icons.lock),
                 labelText: "Password",
@@ -77,10 +129,10 @@ class LoginWidgetState extends State<LoginWidget> {
               onSaved: (value) {
                 this.password = value;
               },
-              validator: (value){
-                if(value == null) return "格式錯誤";
-                if(value.isEmpty) return "格式錯誤";
-                if(value.length<6) return "格式錯誤";
+              validator: (value) {
+                if (value == null) return "格式錯誤";
+                if (value.isEmpty) return "格式錯誤";
+                if (value.length < 6) return "格式錯誤";
                 return null;
               },
             ),
@@ -88,12 +140,15 @@ class LoginWidgetState extends State<LoginWidget> {
               height: 60,
             ),
             RaisedButton(
-              padding: EdgeInsets.all(20),
-              color: Colors.black,
+                padding: EdgeInsets.all(20),
+                color: Colors.black,
                 shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.only(bottomRight: Radius.circular(20))),
-                child: Text("Login",style: TextStyle(color: Colors.white),),
+                child: Text(
+                  "Login",
+                  style: TextStyle(color: Colors.white),
+                ),
                 onPressed: () {
                   formGlobalKey.currentState.save();
                   formGlobalKey.currentState.validate();
