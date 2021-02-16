@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:trail2/pages/group/group.dart';
+import 'package:trail2/pages/home/home.dart';
+import 'package:trail2/pages/mall/mall.dart';
+import 'package:trail2/pages/profile/profile.dart';
+import 'package:trail2/pages/subject/subject.dart';
+
+import 'components/bottom_bar.dart';
+
+
 
 void main() {
   runApp(MaterialApp(
@@ -10,34 +19,19 @@ void main() {
     ),
     home: Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(
-          "ohohoho",
-          style: TextStyle(
-            fontSize: 60,
-            fontWeight: FontWeight.w900,
-          ),
-        ),
-        backgroundColor: Colors.black,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(bottomRight: Radius.circular(60))),
-        shadowColor: Colors.pink,
-        elevation: 60,
-        toolbarHeight: 100,
-      ),
-      body: LoginWidget(),
       bottomNavigationBar: BottomBarWidget(),
     ),
   ));
 }
 
-class BottomBarWidget extends StatefulWidget{
+
+
+class BottomBarWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
     return BottomBarWidgetState();
   }
-
 }
 
 class BottomBarWidgetState extends State<BottomBarWidget> {
@@ -46,34 +40,37 @@ class BottomBarWidgetState extends State<BottomBarWidget> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return  BottomNavigationBar(
-      unselectedItemColor: Colors.white,
-      selectedItemColor: Colors.pink,
-      backgroundColor: Colors.black,
-      currentIndex: _bottomBarIndex,
-      items: [
-        BottomNavigationBarItem(
-            icon: Icon(
-              Icons.login,
-            ),
-            title: Text("login")),
-        BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-            ),
-            title: Text("home")),
-      ],
-      onTap: (value){
-        setState(() {
-          _bottomBarIndex = value;
-        });
-
-      },
-
+    return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        unselectedItemColor: Colors.white,
+        selectedItemColor: Colors.pink,
+        currentIndex: _bottomBarIndex,
+        type: BottomNavigationBarType.shifting,
+        items: [
+          BottomBar("home", "首頁"),
+          BottomBar("subject", "影音"),
+          BottomBar("group", "小組"),
+          BottomBar("mall", "市集"),
+          BottomBar("profile", "我的")
+        ],
+        onTap: (value) {
+          setState(() {
+            _bottomBarIndex = value;
+          });
+        },
+      ),
+      body: IndexedStack(
+        index: _bottomBarIndex,
+        children: <Widget>[
+          Home(),
+          Subject(),
+          Group(),
+          Mall(),
+          Profile(),
+        ],
+      )
     );
   }
-
-
 }
 
 class LoginWidget extends StatefulWidget {
@@ -119,7 +116,6 @@ class LoginWidgetState extends State<LoginWidget> {
             ),
             TextFormField(
               autovalidateMode: AutovalidateMode.always,
-
               decoration: InputDecoration(
                 icon: Icon(Icons.lock),
                 labelText: "Password",
